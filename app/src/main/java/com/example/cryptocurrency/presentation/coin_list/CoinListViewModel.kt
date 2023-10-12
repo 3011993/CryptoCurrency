@@ -18,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
-    private val getCoinsUseCase: GetCoinsUseCase,
-    private val repo: CoinRepository
+    private val getCoinsUseCase: GetCoinsUseCase
 ) :
     ViewModel() {
 
@@ -29,16 +28,14 @@ class CoinListViewModel @Inject constructor(
 
     init {
         getCoins()
-        Log.i("viewModel", "viewModel created")
 
     }
 
     private fun getCoins() {
         viewModelScope.launch {
-            repo.getCoins().collect { result ->
+            getCoinsUseCase().collect() { result ->
                 when (result) {
                     is Resources.Success -> {
-                        Log.i("viewModel", "data is here")
                         _state.value = CoinListState(coins = result.data ?: emptyList())
                     }
 
@@ -50,41 +47,11 @@ class CoinListViewModel @Inject constructor(
                         _state.value = CoinListState(
                             error = result.message ?: "An Unexpected error occurred"
                         )
-                        Log.i("viewModel", "data isn't here")
-
                     }
-
-                    else -> {}
                 }
             }
         }
-//    private fun getCoins() {
-//        viewModelScope.launch {
-//            getCoinsUseCase().collect() { result ->
-//                when (result) {
-//                    is Resources.Success -> {
-//                        Log.i("viewModel", "data is here")
-//                        _state.value = CoinListState(coins = result.data ?: emptyList())
-//                    }
-//
-//                    is Resources.Loading -> {
-//                        _state.value = CoinListState(isLoading = true)
-//                    }
-//
-//                    is Resources.Error -> {
-//                        _state.value = CoinListState(
-//                            error = result.message ?: "An Unexpected error occurred"
-//                        )
-//                        Log.i("viewModel", "data isn't here")
-//
-//                    }
-//
-//                    else -> {}
-//
-//                }
-//            }
-//        }
-//
+
     }
 
 }

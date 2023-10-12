@@ -51,25 +51,21 @@ fun CoinListScreen(
 
             )
         }
-
         if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-
         }
     }
-
 
 }
 
 
-
 @Composable
 @Preview
-fun CoinListScreenPreview(){
+fun CoinListScreenPreview() {
     val navController = rememberNavController()
-    val viewModel : CoinListViewModel=  hiltViewModel()
+    val viewModel: CoinListViewModel = hiltViewModel()
 
-    CryptoCurrencyTheme{
-        CoinListScreen(navController,viewModel)
+    CryptoCurrencyTheme {
+        CoinListScreen(navController, viewModel)
     }
 }

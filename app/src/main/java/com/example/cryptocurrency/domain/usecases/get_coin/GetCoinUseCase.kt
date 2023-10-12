@@ -14,9 +14,7 @@ import java.io.IOException
 
 import javax.inject.Inject
 
-class GetCoinUseCase @Inject constructor(private val repository: CoinRepositoryImpl) {
+class GetCoinUseCase @Inject constructor(private val repository: CoinRepository) {
 
-    operator fun invoke(coinId: String): Flow<Resources<CoinDetail>> = flow {
-        repository.getCoinById(coinId)
-    }
+    suspend operator fun invoke(coinId: String) :Flow<Resources<CoinDetail>> = repository.getCoinById(coinId)
 }

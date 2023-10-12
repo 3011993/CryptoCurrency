@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cryptocurrency.common.Constants
 import com.example.cryptocurrency.common.Resources
 import com.example.cryptocurrency.domain.repository.CoinRepository
@@ -17,10 +18,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CoinDetailViewModel @Inject constructor
-    (
+class CoinDetailViewModel @Inject constructor(
     private val getCoinUseCase: GetCoinUseCase,
-    private val repo: CoinRepository,
     savedStateHandle: SavedStateHandle
 ) :
     ViewModel() {
@@ -35,9 +34,10 @@ class CoinDetailViewModel @Inject constructor
         }
     }
 
+
     private fun getCoin(coinId: String) {
         viewModelScope.launch {
-            repo.getCoinById(coinId).collect { result ->
+            getCoinUseCase(coinId).collect { result ->
                 when (result) {
                     is Resources.Success -> {
                         _state.value = CoinDetailState(coin = result.data)
@@ -56,29 +56,5 @@ class CoinDetailViewModel @Inject constructor
                 }
             }
         }
-
     }
-
-
-//    private fun getCoin(coinId: String) {
-//        getCoinUseCase(coinId).onEach { result ->
-//            when (result) {
-//                is Resources.Success -> {
-//                    _state.value = CoinDetailState(coin = result.data)
-//                }
-//
-//                is Resources.Loading -> {
-//                    _state.value = CoinDetailState(isLoading = true)
-//                }
-//
-//                is Resources.Error -> {
-//                    _state.value = CoinDetailState(
-//                        error = result.message ?: "An Unexpected error occurred"
-//                    )
-//                }
-//
-//            }
-//        }.launchIn(viewModelScope)
-//
-//    }
 }

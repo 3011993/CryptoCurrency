@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.flow
 
 import javax.inject.Inject
 
-class GetCoinsUseCase @Inject constructor(private val repository: CoinRepositoryImpl) {
+class GetCoinsUseCase @Inject constructor(private val repository: CoinRepository) {
 
-    operator fun invoke(): Flow<Resources<List<Coin>>> = flow {
-        repository.getCoins()
-    }
+    suspend operator fun invoke(): Flow<Resources<List<Coin>>> = repository.getCoins()
 }
